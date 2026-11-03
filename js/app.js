@@ -25,7 +25,8 @@ $(function () {
         { name: 'Sophia', color: 'purple', arrival: '21:20', aitu: true, items: ['phone'] },
         { name: 'Dias', color: 'green', arrival: '19:45', aitu: true, items: [] },
         { name: 'Bekzat', color: 'purple', arrival: '20:55', aitu: false, items: ['bag', 'cup', 'crumbs'] },
-        { name: 'Aruzhan', color: 'blue', arrival: '21:50', aitu: true, items: ['phone'] }
+        { name: 'Aruzhan', color: 'blue', arrival: '21:50', aitu: true, items: ['phone'] },
+        { name: 'Saule', color: 'green', arrival: '21:25', aitu: false, items: ['glasses'] }
       ]
     },
     {
@@ -139,6 +140,12 @@ $(function () {
       $room.append($header, $guests);
       $house.append($room);
     });
+
+    const activeFloor = $('.floor-button.is-active').attr('data-floor') || 'all';
+    if (activeFloor !== 'all') {
+      $('.room').hide();
+      $('.room[data-floor="' + activeFloor + '"]').show();
+    }
   }
 
   function renderCaseButtons() {
@@ -205,7 +212,7 @@ $(function () {
 
     switch (caseNumber) {
       case 1:
-        $found = $('.room[data-room="Hall"]').find('.guest');
+        $found = $('.room[data-room="Hall"] .guest');
         break;
       case 2:
         $found = $('.guest.color-yellow, .guest.color-purple');
@@ -214,15 +221,10 @@ $(function () {
         $found = $('.room[data-floor="2"] .guest.aitu');
         break;
       case 4:
-        $found = $('.guest').filter(function () {
-          return $(this).data('glasses') || $(this).data('bag');
-        });
+        $found = $('.guest.glasses, .guest.bag');
         break;
       case 5:
-        $found = $('.guest').filter(function () {
-          const $guest = $(this);
-          return !$guest.data('phone') && !$guest.data('glasses') && !$guest.data('bag') && !$guest.data('cup') && !$guest.data('crumbs');
-        });
+        $found = $('.guest').not('.phone, .glasses, .bag, .cup, .crumbs');
         break;
       case 6:
         $found = $('.guest.phone').not('.bag');
@@ -234,8 +236,8 @@ $(function () {
         });
         break;
       case 8:
-        $found = $('.guest').filter(function () {
-          return Number($(this).attr('data-arrival-minutes')) > 1260 && !$(this).hasClass('aitu');
+        $found = $('.guest').not('.aitu').filter(function () {
+          return Number($(this).attr('data-arrival-minutes')) > 1260;
         });
         break;
       case 9: {
@@ -244,7 +246,7 @@ $(function () {
         break;
       }
       case 10:
-        $found = $('.room').find('.guest:last-child');
+        $found = $('.room-guests .guest:last-child');
         break;
       case 11:
         $found = $('.room-guests > .guest:nth-child(3)');
@@ -264,10 +266,7 @@ $(function () {
         });
         break;
       case 16:
-        $found = $('.room').filter(function () {
-          const $guests = $(this).find('.guest');
-          return $guests.filter('.cup').length > 0 && $guests.filter('.glasses').length === 0;
-        });
+        $found = $('.room:has(.guest.cup)').not(':has(.guest.glasses)');
         break;
       case 17:
         $('.room').each(function () {
@@ -288,14 +287,13 @@ $(function () {
         customMessage = $found.length ? 'Natasha said goodbye. Her card fades out and is removed from the page.' : 'Natasha has already left the party.';
         break;
       case 20:
-        $found = $('.room[data-floor="1"] .guest').filter(function () {
-          const $guest = $(this);
-          const arrival = Number($guest.attr('data-arrival-minutes'));
-          const nextIsAitu = $guest.next('.guest').hasClass('aitu');
-          const previousIsAitu = $guest.prev('.guest').hasClass('aitu');
-          return arrival > 1260 && arrival < 1290 && $guest.hasClass('crumbs') && !$guest.hasClass('cup') && (nextIsAitu || previousIsAitu);
+        $found = $('.room[data-floor="1"] .guest.crumbs').not('.cup').filter(function () {
+          const arrival = Number($(this).attr('data-arrival-minutes'));
+          const nextIsAitu = $(this).next('.guest').hasClass('aitu');
+          const previousIsAitu = $(this).prev('.guest').hasClass('aitu');
+          return arrival > 1260 && arrival < 1290 && (nextIsAitu || previousIsAitu);
         });
-        customMessage = 'The clues identify the cake thief.';
+        customMessage = 'The clues identify Zarina as the cake thief!';
         break;
       default:
         break;
@@ -548,6 +546,19 @@ $(function () {
     } else {
       $('#mode-status').text('Task 2 · Search the live house');
       $('#mode-help').text('Cases search the current DOM without rebuilding it. Guest moves, Miras and Natasha changes remain in effect.');
+    }
+  });
+
+  $('.floor-key').on('click', '.floor-button', function () {
+    const floor = $(this).attr('data-floor');
+    $('.floor-button').removeClass('is-active');
+    $(this).addClass('is-active');
+
+    if (floor === 'all') {
+      $('.room').stop(true, false).fadeIn(300);
+    } else {
+      $('.room[data-floor="' + floor + '"]').stop(true, false).fadeIn(300);
+      $('.room').not('[data-floor="' + floor + '"]').stop(true, false).fadeOut(300);
     }
   });
 
