@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AITU birthday party investigation built with jQuery selectors, traversal, effects and animations.">
+  <title>Assignment 6 - jQuery Party Detective</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="js/jquery-3.6.1.min.js"></script>
+  <script defer src="js/app.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-copy">
+      <p class="eyebrow">Assignment 06 · jQuery</p>
+      <h1>The Birthday Party Mystery</h1>
+      <p class="header-description">Find the cake thief, explore the house and animate the guests.</p>
+    </div>
+    <div class="header-actions">
+      <button class="button button-quiet" id="reset-house" type="button">Reset house</button>
+      <button class="button button-primary" id="clear-spotlight" type="button">Clear spotlight</button>
+    </div>
+  </header>
+
+  <main class="page-shell">
+    <section class="control-panel" aria-labelledby="mode-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">How the cases run</p>
+          <h2 id="mode-title">Investigation mode</h2>
+        </div>
+        <span class="status-pill" id="mode-status">Task 1 · Rebuild before each case</span>
+      </div>
+      <div class="mode-switch" role="group" aria-label="Investigation mode">
+        <button class="mode-button is-active" data-mode="task1" type="button">Task 1 · Rebuild</button>
+        <button class="mode-button" data-mode="task2" type="button">Task 2 · Live house</button>
+      </div>
+      <p class="helper-text" id="mode-help">Each case starts from the original party picture, as required in Task 1.</p>
+      <div class="case-grid" id="case-grid" aria-label="Investigation cases"></div>
+      <div class="case-result" id="case-result" aria-live="polite">
+        <span class="result-label">Case result</span>
+        <strong>Select a case to begin.</strong>
+        <p>The matching guests or rooms will be highlighted here.</p>
+      </div>
+    </section>
+
+    <section class="house-section" aria-labelledby="house-title">
+      <div class="section-heading house-heading">
+        <div>
+          <p class="eyebrow">19:30 — 22:30</p>
+          <h2 id="house-title">The party house</h2>
+        </div>
+        <div class="floor-key"><span>Floor 2</span><span>Floor 1</span></div>
+      </div>
+      <div class="house-roof"><span>THE PARTY</span><small>Birthday night · AITU</small></div>
+      <div class="house-grid" id="house-grid"></div>
+      <div class="legend" aria-label="Guest card legend">
+        <div class="legend-colour"><i class="swatch red"></i><i class="swatch blue"></i><i class="swatch green"></i><i class="swatch black"></i><i class="swatch yellow"></i><i class="swatch purple"></i><span>Clothing colour</span></div>
+        <span>📱 Phone</span><span>👓 Glasses</span><span>🛍️ Bag</span><span>☕ Cup</span><span>🍰 Cake crumbs</span><span>🎓 AITU student</span>
+      </div>
+    </section>
+
+    <section class="task-two-panel" aria-labelledby="motion-title">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Task 2 · Effects and animations</p>
+          <h2 id="motion-title">Put the party in motion</h2>
+        </div>
+        <span class="status-pill status-blue">jQuery effects only</span>
+      </div>
+      <p class="helper-text">Click a guest card to open the animated details panel. Use the room buttons to sort guests by arrival time. In Task 2 · Live house mode, case buttons search the current house after moves and changes.</p>
+      <div class="motion-notes">
+        <div><strong>Spotlight</strong><span>Other guests fade to 20%.</span></div>
+        <div><strong>Guest card</strong><span>Open with a grow animation; close with Esc or outside click.</span></div>
+        <div><strong>Move</strong><span>Send a guest to another room with a flight animation.</span></div>
+        <div><strong>Sort by time</strong><span>Toggle between arrival order and picture order.</span></div>
+      </div>
+    </section>
+
+    <footer class="page-footer">
+      <span>Built with HTML, CSS and jQuery.</span>
+      <span>All interactive behaviour is handled by jQuery.</span>
+    </footer>
+  </main>
+</body>
+</html>
